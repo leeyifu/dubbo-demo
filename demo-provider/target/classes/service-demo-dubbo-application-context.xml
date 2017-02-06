@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://code.alibabatech.com/schema/dubbo 
+	   http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    <!--
+            配置手册http://dubbo.io/Configuration+Reference-zh.htm 
+            大多数配置可以采取默认配置，诸如超时时间、重试次数等
+    -->
+    <dubbo:application name="demo-service-provider" owner="liyifu" organization="liyifu-group"/> <!-- 应用名称 -->
+    <dubbo:registry client="curator" group="${demo.service.dubbo.registry.group}" protocol="zookeeper"
+                    address="${demo.service.dubbo.registry.address}"
+                    file="${demo.service.dubbo.registry.cache}"/> <!-- 注册中心 -->
+
+    <dubbo:protocol name="dubbo" port="20100"/> <!-- 服务提供者协议配置 -->
+
+    <!-- 具体的对外服务定义在配置文件中 -->
+    <bean id="demoService" class="com.leeyifu.demo.provider.DemoServiceImpl"/> <!-- 具体实现bean -->
+    <dubbo:service interface="com.leeyifu.demo.openapi.DemoService" ref="demoService"
+                   version="1.0.0"/> <!-- 暴露给外界的服务 -->
+</beans>
